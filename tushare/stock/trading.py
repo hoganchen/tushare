@@ -720,7 +720,7 @@ def _get_k_data(url, dataflag='',
                 ktype = '',
                 retry_count=3,
                 pause=0.001):
-    for _ in range(retry_count):
+    for try_count in range(retry_count):
             time.sleep(pause)
             try:
                 request = Request(url)
@@ -728,7 +728,9 @@ def _get_k_data(url, dataflag='',
                 if len(lines) < 100: #no data
                     return None
             except Exception as e:
-                print(e)
+                # print(e)
+                if try_count == retry_count - 1:
+                    print('try_count: {}, retry_count: {}, exception: {}'.format(try_count, retry_count, e))
             else:
                 lines = lines.decode('utf-8') if ct.PY3 else lines
                 lines = lines.split('=')[1]
